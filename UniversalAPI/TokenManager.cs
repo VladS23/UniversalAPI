@@ -2,29 +2,36 @@
 {
     public class TokenManager: ITokenManager
     {
-        static Database db = new Database();
+        static Database db;
+        public TokenManager()
+        {
+            db = new Database();
+        }
         public void AddToken(string token)
         {
-            Token t;
-            if (Database.db.Tokens.Where(t => t.value == token).ToList().Count == 1)
+            if (!TokenInDb(token))
             {
-                Database.db.Add(token);
+                Token t = new Token(token);
+                Database.db.Add(t);
                 Database.db.SaveChanges();
             }
         }
         public void RemoveToken(string token)
         {
-            Token t;
-            if (Database.db.Tokens.Where(t => t.value == token).ToList().Count == 1)
+            if (TokenInDb(token))
             {
-                Database.db.Remove(token);
+                Token t = new Token(token);
+                Database.db.Remove(t);
                 Database.db.SaveChanges();
             }
         }
         public bool CheckToken(string token)
         {
-            Token t;
-            return Database.db.Tokens.Where(t => t.value == token).ToList().Count == 1;
+            return TokenInDb(token);
+        }
+        private bool TokenInDb(string token)
+        {
+            return Database.db.Tokens.Where(t => t.value == token).ToList().Count==1;
         }
     }
 }

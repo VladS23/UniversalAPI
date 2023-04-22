@@ -1,9 +1,15 @@
-﻿namespace UniversalAPI
+﻿
+namespace UniversalAPI
 {
     public class Token
     {
-        public string value;
-        Token(string value)
+        public long Id { get; set; }
+        public string value { get; set; }
+        public Token()
+        {
+
+        }
+        public Token(string value)
         {
             this.value = value;
         }
