@@ -30,7 +30,8 @@ string HandleUSDpurchaseRateRequest(string token)
 {
     if (tokens.CheckToken(token))
     {
-        return "TODO3";
+        var cb = new CentralBank();
+        return cb.USDpurchaseRate();
     }
     return "Invalid APIToken";
 }
@@ -39,7 +40,8 @@ string HandleUSDsellingRateRequest(string token)
 {
     if (tokens.CheckToken(token))
     {
-        return "TODO4";
+        var cb = new CentralBank();
+        return cb.USDsellingRate();
     }
     return "Invalid APIToken";
 }

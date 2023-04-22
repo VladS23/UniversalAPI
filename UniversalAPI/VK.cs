@@ -23,6 +23,7 @@
                 return "Ofline";
             }
         }
+
         private string GetHtmlCode(string userId)
         {
             string url = BuildURL(userId);
