@@ -1,35 +1,36 @@
 ﻿using HtmlAgilityPack;
+using System.Text;
 
 namespace UniversalAPI
 {
     public class CentralBank : Site
     {
-        public override string BuildURL(string data)
+        public override string BuildURL(string[] data)
         {
-            return "https://cbr.ru/" + data;
+            return "https://cbr.ru/" + new StringBuilder().Append(string.Join("/", data));
         }
 
         public string USDpurchaseRate()
         {
-            string url = BuildURL("key-indicators/");
+            string url = BuildURL(new string[]{ "key-indicators"});
             string html = GetHTML(url);
 
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
 
-            var result = htmlDoc.DocumentNode.SelectNodes("/html/body/main/div/div/div/div[2]/div[2]/div[4]/div/div/table/tbody/tr[2]/td[2]")[0].InnerText;
+            var result = htmlDoc.DocumentNode.SelectSingleNode("//div[text()=\"Доллар США\"]/../../../td[2]").InnerText;
             return result;
         }
 
         public string USDsellingRate()
         {
-            string url = BuildURL("key-indicators/");
+            string url = BuildURL(new String[] { "key-indicators" });
             string html = GetHTML(url);
 
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
 
-            var result = htmlDoc.DocumentNode.SelectNodes("/html/body/main/div/div/div/div[2]/div[2]/div[4]/div/div/table/tbody/tr[2]/td[3]/text()")[0].InnerText;
+            var result = htmlDoc.DocumentNode.SelectSingleNode("//div[text()=\"Доллар США\"]/../../../td[3]").InnerText;
             return result;
         }
 
