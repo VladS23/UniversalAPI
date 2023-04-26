@@ -11,16 +11,26 @@
             this.app = app;
         }
 
-        public void  Run()
+        public void Run()
         {
-            //tokens.AddToken("123456789");
+            tokens.AddToken("123");
 
             app.Map("/vk/getOnlineStatus", HandleGetOnlineStatusRequest);
 
             app.Map("/cb/USDpurchaseRate", HandleUSDpurchaseRateRequest);
             app.Map("/cb/USDsellingRate", HandleUSDsellingRateRequest);
 
+            app.Map("/hello", HandleHelloRequest);
+
             app.Run();
+        }
+
+        void HandleHelloRequest(IApplicationBuilder app)
+        {
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("hello!");
+            });
         }
 
         void HandleGetOnlineStatusRequest(IApplicationBuilder app)
@@ -29,9 +39,15 @@
             {
                 if (ContainsTokenAndUserId(context.Request.Query))
                 {
-                    string token = context.Request.Query["token"];
-                    string userId = context.Request.Query["userId"];
-                    if (tokens.CheckToken(token))
+                    string? token = context.Request.Query["token"];
+                    string? userId = context.Request.Query["userId"];
+
+                    if
+                    (token != null
+                    &&
+                    tokens.CheckToken(token)
+                    &&
+                    userId != null)
                     {
                         var vk = new VK();
                         await context.Response.WriteAsync(vk.GetOnlineStatus(userId));
@@ -54,8 +70,8 @@
             {
                 if (ContainsToken(context.Request.Query))
                 {
-                    string token = context.Request.Query["token"];
-                    if (tokens.CheckToken(token))
+                    string? token = context.Request.Query["token"];
+                    if (token != null && tokens.CheckToken(token))
                     {
                         var cb = new CentralBank();
                         await context.Response.WriteAsync(cb.USDpurchaseRate());
@@ -78,8 +94,8 @@
             {
                 if (ContainsToken(context.Request.Query))
                 {
-                    string token = context.Request.Query["token"];
-                    if (tokens.CheckToken(token))
+                    string? token = context.Request.Query["token"];
+                    if (token != null && tokens.CheckToken(token))
                     {
                         var cb = new CentralBank();
                         await context.Response.WriteAsync(cb.USDsellingRate());

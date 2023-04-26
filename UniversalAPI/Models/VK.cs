@@ -1,10 +1,12 @@
-﻿namespace UniversalAPI
+﻿using System.Text;
+
+namespace UniversalAPI
 {
     public class VK : Site
     {
-        public override string BuildURL(string data)
+        public override string BuildURL(string[] data)
         {
-            return $"https://www.vk.com/" + data;
+            return $"https://www.vk.com/" + new StringBuilder().Append(string.Join("/",data));
         }
 
         public string GetOnlineStatus(string userId)
@@ -26,7 +28,7 @@
 
         private string GetHtmlCode(string userId)
         {
-            string url = BuildURL(userId);
+            string url = BuildURL(new String[] {userId});
             string result = "";
             try
             {
@@ -44,7 +46,7 @@
            }
             catch (Exception ex)
             {
-                return "";
+                return ex.ToString();
             }
         }
     }

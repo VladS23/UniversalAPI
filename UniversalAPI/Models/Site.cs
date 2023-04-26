@@ -2,6 +2,6 @@
 {
     public abstract class Site
     {
-        public abstract string BuildURL(string data);
+        public abstract string BuildURL(string[] data);
     }
 }
